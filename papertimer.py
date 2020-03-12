@@ -38,7 +38,7 @@ import tkMessageBox
 import time
 import math
 
-defaultInterval = 20 * 60
+defaultInterval = 10 * 60
 warnInterval = 5 * 60
 
 _VERSION = "1.0"
@@ -184,7 +184,7 @@ def OnPressEnter(event):
         pausedAt = prefixBuffer
     prefixBuffer = 0
 
-    draw()
+    tick()
 
 def OnPressPlus(event):
     global prefixBuffer, prefixBufferExpires
@@ -256,11 +256,12 @@ def draw(force = False):
         #if int(remainingTime * 2) % 2 != 0:
         warn = True
 
-    seconds = max(0, math.ceil(remainingSeconds/10.0)*10)
+    #seconds = max(0, math.ceil(remainingSeconds/10.0)*10)
+    seconds = remainingSeconds
     colon = (remainingSeconds % 2 == 0) or (pausedAt != None)
     bgcolor = _BG
-    if remainingSeconds <= 0 and remainingSeconds % 2 == 0:
-        bgcolor = _BGOUT
+    #if remainingSeconds <= 0 and remainingSeconds % 2 == 0:
+    #    bgcolor = _BGOUT
 
     draw_parameters = (x, y, seconds, colon, warn, bgcolor)
     if draw_parameters != last_draw_parameters or force:
@@ -271,15 +272,16 @@ def draw(force = False):
 
 def tick():
     draw()
-    root.after(100, tick)
+    if time.time() <= endTime:
+        root.after(250, tick)
 
 def main():
     global root, c
     
     root = Tkinter.Tk()
     root.title("papertimer %s" % (_VERSION))
-    w = root.winfo_screenwidth()
-    h = root.winfo_screenheight()
+    w = root.winfo_screenwidth() / 2
+    h = root.winfo_screenheight() / 2
     #root.overrideredirect(1)
     root.geometry("%dx%d+0+0" % (w, h))
     #root.wm_attributes('-fullscreen', 1)
@@ -298,7 +300,7 @@ def main():
     root.bind("<Down>", OnPressMinus)
     root.bind("<F1>", OnPressHelp)
     root.bind("h", OnPressHelp)
-    tick()
+    #tick()
     root.mainloop()
 
 if __name__ == "__main__":

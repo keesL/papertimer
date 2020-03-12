@@ -9,3 +9,11 @@ for session chairs and presentations. Run as follows:
 
 Press <F1> or 'h' for help.
 
+
+====
+
+Forked by Kees Leune <kees@leune.org> on March 12, 2020 to accomplish the
+following goals:
+
+1. Move from Python2 to Python3
+2. Finetune for my purposes
